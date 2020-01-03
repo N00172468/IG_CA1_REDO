@@ -17,6 +17,16 @@ let rowHeight;
 let molPerGrid = [];
 let tempArray = [];
 
+// For GUI Checkbox
+var renderMols = true;
+var moveMols = true;
+var checkEdge = true;
+var bruteForceChecks = true;
+var intersectionChecks = true;
+var grid = true;
+var molsPerCell = true;
+var showStats = true;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
@@ -39,6 +49,14 @@ function setup() {
     });
   gui_col.add(this, "numRows", 1, 50).step(1); // No. of Rows = Min: 1, Max: 50
   gui_col.add(this, "numCols", 1, 50).step(1); // No. of Columns = Min: 1, Max: 50
+  gui_col.add(this, "renderMols"); // On/Off Checkbox
+  gui_col.add(this, "moveMols"); 
+  gui_col.add(this, "checkEdge"); 
+  gui_col.add(this, "bruteForceChecks");  
+  gui_col.add(this, "intersectionChecks");  
+  gui_col.add(this, "grid"); 
+  gui_col.add(this, "molsPerCell");  
+  gui_col.add(this, "showStats");  
 
   //  noLoop();
 }
@@ -53,14 +71,15 @@ function draw() {
 
   // Call out Class Functions:
   molecules.forEach(molecule => {
-    molecule.render();
-    molecule.step();
-    molecule.checkEdges();
-    molecule.bruteChecks();
-    molecule.checkIntersections();
-    molecule.splitIntoGrids();
-    molecule.drawGrid();
-    molecule.statistics();
+    // If loops for GUI checkboxes
+    this.renderMols ? molecule.render() : this.renderMols = false;
+    this. moveMols ? molecule.step() : this.moveMols = false;
+    this.checkEdge ? molecule.checkEdges() : this.checkEdge = false;
+    this.bruteForceChecks ? molecule.bruteChecks() : this.bruteForceChecks = false; 
+    this.intersectionChecks ? molecule.checkIntersections() : this.intersectionChecks = false;
+    this.grid ? molecule.drawGrid() : this.grid = false; 
+    this.molsPerCell ? molecule.splitIntoGrids() : this.molsPerCell = false;
+    this.showStats ? molecule.statistics() : this.showStats = false;
   });
 
   // console.timeEnd("Time Taken");

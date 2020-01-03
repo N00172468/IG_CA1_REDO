@@ -6,11 +6,11 @@ class Molecule {
       random(this.radius, height - this.radius * 2)
     );
     this.velocity = createVector(random(-15, 20), random(-15, 20));
-    this.moleculeId = _moleculeId;
-    this.molFill = false;
-    this.angle = 41.5;
-    this.checks;
-    this.checkIntersection;
+    this.moleculeId = _moleculeId; // Tracking I.D per Object (Starting at 0)
+    this.molFill = false; // Object Fill colour = False by default
+    this.angle = 41.5; // Starting angle of aesthetic design within Object
+    this.checks; // Attribute for Brute-force Checking function
+    this.checkIntersection; // Attribute for Intersection Checking function
   }
 
   // **RENDER** - Animate Objects:
@@ -18,14 +18,13 @@ class Molecule {
     checks = 0;
     checkIntersection = 0;
 
-    this.molFill ? fill(56,131,227) : noFill();
+    this.molFill ? fill(56, 131, 227) : noFill(); // i.e. If Objects are intersecting, fill in objects. Else don't fill
 
     push();
-
-    stroke(40,126,235);
+    stroke(40, 126, 235);
     strokeWeight(2);
-    let c = cos(this.angle);
-    translate(this.position.x, this.position.y);
+    let c = tan(this.angle); // Allows angle of aesthetics to be animated (in this case, rotating)
+    translate(this.position.x, this.position.y); // Displace 
     rotate(c);
     this.angle++;
     ellipse(0, 0, this.radius * 1.8, this.radius * 0.2);
@@ -91,14 +90,14 @@ class Molecule {
   // **SPLIT-INTO-GRIDS** - Check Molecules if in Specific Grid (Reference: xCell = i / yCell = j):
   splitIntoGrids() {
     this.molFill = 0;
-    
+
     molecules.forEach(molecule => {
       tempArray = [];
-      
+
       for (let xCell = 0; xCell < numRows; xCell++) {
         for (let yCell = 0; yCell < numCols; yCell++) {
           let rowHeight = height / numCols;
-          
+
           if (
             molecule.position.x < rowWidth * (xCell + 1) &&
             molecule.position.x > rowWidth * xCell &&
@@ -136,7 +135,7 @@ class Molecule {
 
   // **STATISTICS** - Display Statistics (Top Left Corner):
   statistics() {
-    fill(47,226,255);
+    fill(47, 226, 255);
     textSize(11);
     text("FPS: " + frameRate().toFixed(0), 5, 14);
     text("No. of Mols: " + numOfMolecules, 5, 25);
