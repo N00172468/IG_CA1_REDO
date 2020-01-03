@@ -5,7 +5,7 @@ let radius = minRadius + maxRadius;
 
 // Molecules:
 let molecules = [];
-var numOfMolecules = 1; // Default for GUI
+var numOfMolecules = 20; // Default for GUI
 
 // Rows and Columns:
 var numRows = 6; // Default for GUI
