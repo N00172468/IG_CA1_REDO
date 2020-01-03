@@ -6,7 +6,7 @@ class Molecule {
       random(this.radius, height - this.radius * 2)
     );
     this.velocity = createVector(random(-15, 20), random(-15, 20));
-    this.moleculeId = _moleculeId; // Tracking I.D per Object (Starting at 0)
+    this.moleculeId = _moleculeId; // Tracking I.D per Object (Starting at Object I.D: 0)
     this.molFill = false; // Object Fill colour = False by default
     this.angle = 41.5; // Starting angle of aesthetic design within Object
     this.checks; // Attribute for Brute-force Checking function
@@ -15,6 +15,7 @@ class Molecule {
 
   // **RENDER** - Animate Objects:
   render() {
+    // Refresh to prevent stacking
     checks = 0;
     checkIntersection = 0;
 
@@ -24,12 +25,12 @@ class Molecule {
     stroke(40, 126, 235);
     strokeWeight(2);
     let c = tan(this.angle); // Allows angle of aesthetics to be animated (in this case, rotating)
-    translate(this.position.x, this.position.y); // Displace 
-    rotate(c);
-    this.angle++;
-    ellipse(0, 0, this.radius * 1.8, this.radius * 0.2);
-    ellipse(0, 0, this.radius * 0.2, this.radius * 1.8);
-    ellipse(0, 0, this.radius * 2, this.radius * 2);
+    translate(this.position.x, this.position.y); // Displace 0,0 coordinates
+    rotate(c); // Rotate aesthetics
+    this.angle++; // Animate aesthetics
+    ellipse(0, 0, this.radius * 1.8, this.radius * 0.2); // Aesthetics (i.e. Oval-1)
+    ellipse(0, 0, this.radius * 0.2, this.radius * 1.8); // Aesthetics (i.e. Oval-2)
+    ellipse(0, 0, this.radius * 2, this.radius * 2); // Main Object (i.e. Molecule)
     pop();
 
     noFill();
@@ -42,17 +43,11 @@ class Molecule {
 
   // **CHECK-EDGES** - Outside Canvas Prevention:
   checkEdges() {
-    if (
-      this.position.x < this.radius ||
-      this.position.x > width - this.radius
-    ) {
+    if (this.position.x < this.radius || this.position.x > width - this.radius) {
       this.velocity.x = this.velocity.x * -1;
     }
 
-    if (
-      this.position.y < this.radius ||
-      this.position.y > height - this.radius
-    ) {
+    if (this.position.y < this.radius || this.position.y > height - this.radius) {
       this.velocity.y = this.velocity.y * -1;
     }
   }
@@ -61,10 +56,7 @@ class Molecule {
   bruteChecks() {
     for (let i = 0; i < molecules.length; i++) {
       for (let j = 0; j < molecules.length; j++) {
-        if (
-          p5.Vector.sub(molecules[i].position, molecules[j].position).mag() <
-          radius
-        ) {
+        if (p5.Vector.sub(molecules[i].position, molecules[j].position).mag() < radius) {
           checks++;
         }
       }
@@ -75,13 +67,10 @@ class Molecule {
   checkIntersections() {
     for (let i = 0; i < molecules.length; i++) {
       for (let j = i + 1; j < molecules.length; j++) {
-        if (
-          p5.Vector.sub(molecules[i].position, molecules[j].position).mag() <
-          radius
-        ) {
+        if (p5.Vector.sub(molecules[i].position, molecules[j].position).mag() < radius) {
           checkIntersection++;
-          molecules[i].molFill = true;
-          molecules[j].molFill = true;
+          molecules[i].molFill = true; // When intersect, fill in Object i
+          molecules[j].molFill = true; // When intersect, fill in Object j
         }
       }
     }
@@ -89,6 +78,7 @@ class Molecule {
 
   // **SPLIT-INTO-GRIDS** - Check Molecules if in Specific Grid (Reference: xCell = i / yCell = j):
   splitIntoGrids() {
+    // Refresh to prevent stacking
     this.molFill = 0;
 
     molecules.forEach(molecule => {
@@ -105,6 +95,8 @@ class Molecule {
             molecule.position.y > rowHeight * yCell
           ) {
             tempArray.push(molecule.moleculeId);
+
+            // ---UN-COMMENT BELOW FOR TESTING (WARNING: FPS WILL DROP A GOOD AMOUNT!)---
             // console.table("---MOL ID---: " + this.moleculeId);
             // console.table("xCell: " + xCell + "     yCell: " + yCell);
             // console.table("X Pos: " + round(molecule.position.x) + "   Y Pos: " + round(molecule.position.y));
