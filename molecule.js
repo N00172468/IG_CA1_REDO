@@ -5,7 +5,7 @@ class Molecule {
       random(this.radius, width - this.radius * 2),
       random(this.radius, height - this.radius * 2)
     );
-    this.velocity = createVector(random(-15, 5), random(-15, 5));
+    this.velocity = createVector(random(-15, 20), random(-15, 20));
     this.moleculeId = _moleculeId;
     this.molFill = false;
     this.angle = 41.5;
