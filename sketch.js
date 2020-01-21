@@ -71,10 +71,14 @@ function draw() {
 
   // Call out Class Functions:
   molecules.forEach(molecule => {
+    molecule.render();
+    molecule.step();
+    molecule.checkEdges();
+
     // If loops for GUI checkboxes
-    this.renderMols ? molecule.render() : this.renderMols = false;
-    this.moveMols ? molecule.step() : this.moveMols = false;
-    this.checkEdge ? molecule.checkEdges() : this.checkEdge = false;
+    // this.renderMols ? molecule.render() : this.renderMols = false;
+    // this.moveMols ? molecule.step() : this.moveMols = false;
+    // this.checkEdge ? molecule.checkEdges() : this.checkEdge = false;
     // this.bruteForceChecks ? molecule.bruteChecks() : this.bruteForceChecks = false; 
     // this.intersectionChecks ? molecule.checkIntersections() : this.intersectionChecks = false;
     // this.grid ? molecule.drawGrid() : this.grid = false; 
